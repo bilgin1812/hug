@@ -1,4 +1,4 @@
-package user;
+package gestionData;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -9,7 +9,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Vector;
 
-import ressource.Infirmier;
+import ressource.Nurse;
 import net.sf.sojo.interchange.Serializer;
 import net.sf.sojo.interchange.json.JsonSerializer;
 
@@ -19,14 +19,14 @@ public class ReadCVS {
 public ReadCVS()
 {
 }
-  public ArrayList<Infirmier> read() {
+  public ArrayList<Nurse> read() {
  
 	String csvFile = "infirmiers.csv";
 	BufferedReader br = null;
 	String line = "";
 	String cvsSplitBy = ",";
 	String cvsSplitPref ="\\+";
-	ArrayList<Infirmier> listInf= new ArrayList<Infirmier>();
+	ArrayList<Nurse> listInf= new ArrayList<Nurse>();
  
 	try {
  
@@ -59,14 +59,12 @@ public ReadCVS()
 					pref.add(Integer.valueOf(st[j]));
 				}
 			}
-			Infirmier inf =new Infirmier(id, taux, comp, pref);
+			Nurse inf =new Nurse(id, taux, comp, pref);
 			listInf.add(inf);
-
-			
+		
 			}
 		}
  
-
  
 	} catch (FileNotFoundException e) {
 		e.printStackTrace();

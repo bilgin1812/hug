@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.7"/>
+	<classpathentry kind="lib" path="/home/bilginh/Bureau/projet_sem/workspace/sojo-1.0.0-bin/sojo-1.0.0.jar"/>
+	<classpathentry kind="lib" path="/home/bilginh/Bureau/projet_sem/workspace/sojo-1.0.0-bin/sojo-optional-1.0.0.jar"/>
+	<classpathentry kind="lib" path="/home/bilginh/Bureau/projet_sem/workspace/sojo-1.0.0-bin/sojo-with-tests-1.0.0.jar"/>
+	<classpathentry kind="lib" path="/home/bilginh/Bureau/projet_sem/workspace/gson-2.3.1.jar"/>
+	<classpathentry kind="lib" path="/home/bilginh/Bureau/projet_sem/workspace/json-simple-1.1.1.jar"/>
+	<classpathentry kind="lib" path="/home/bilginh/Bureau/projet_sem/or-tools/com.google.ortools.jar"/>
+	<classpathentry kind="lib" path="/home/bilginh/Bureau/projet_sem/or-tools/or-tools.Linux32/lib"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
