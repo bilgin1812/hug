@@ -39,7 +39,7 @@ public class NurseSolverLinear implements SolverInterface {
 		// Windows
 		// System.loadLibrary("jniortools");
 
-		// Linux
+		// Linux chemin absolu
 		System.load("/home/bilginh/Bureau/projet_sem/workspace/HUG/libjniortools.so");
 
 	}
@@ -99,9 +99,9 @@ public class NurseSolverLinear implements SolverInterface {
 
 		// DATA
 
-		// tranche 1 = matin
-		// tranche 2 = après midi
-		// tranche 3 = nuit
+		// tranche 1 = morning
+		// tranche 2 = afternoon
+		// tranche 3 = night
 
 		int nbrInfirmier = this.listInf.size();
 		int jc = 8; // jours de congé par mois
@@ -246,22 +246,16 @@ public class NurseSolverLinear implements SolverInterface {
 
 			}
 		}
-		/*
-		 * int shiftsOneWeek=21; int num_semaine = 21; // 7 jours 3 tranches
-		 * Random r = new Random(); // C13 tout personnel doit faire au moins un
-		 * weekend de congÃ© for (int i = 0; i < nbr_inf; i++) { // ((max - min)
-		 * + 1) + min; // on a 4 semaines, on choisit entre 1 et 4 int we =
-		 * r.nextInt((4 - 1) + 1) + 1; MPConstraint c13 =
-		 * solver.makeConstraint(0, 0); for (int j = 0; j < 6; j++) { // 6 =
-		 * tranches pour le WE c13.setCoefficient(matrice[i][j + num_semaine *
-		 * we - 6], 1); } }
-		 */
+
 /************************/
 		
+
 		int shiftsOneWeek = 21; // 7 jours 3 tranches // C11tout
+		
 		// à revoir
 		MPVariable[] P = solver.makeIntVarArray(4*nbrInfirmier, 0, 1); //
 		// personnel doit faire au moins un weekend de congÃ©
+	
 		for (int i = 0; i < nbrInfirmier; i++) {
 			MPConstraint c13 = solver.makeConstraint(0, 3);
 			//MPVariable[] P = solver.makeIntVarArray(4, 0, 1); //
@@ -269,15 +263,15 @@ public class NurseSolverLinear implements SolverInterface {
 
 			for (int j = 0; j < totalShiftsPerMonth / shiftsOneWeek; j++) { // number ofweeks =totalShifts/  shiftsOneWeek
 				
-				MPConstraint c11 = solver.makeConstraint(0, 1);
-				MPConstraint c12 = solver.makeConstraint(-1, 0);
-				c11.setCoefficient(P[i*4+j], -1);
-				c12.setCoefficient(P[i*4+j], -2);
+				MPConstraint c11 = solver.makeConstraint(0, 3);
+				MPConstraint c12 = solver.makeConstraint(0, 1);
+				c11.setCoefficient(P[i*4+j], 1);
+				c12.setCoefficient(P[i*4+j], -1);
 				
-				for (int k = shiftsOneWeek - (nbrshiftsPerDay * 2); k < shiftsOneWeek; k++) { // on parcours 2 jourssm dim
+				for (int k = shiftsOneWeek - (nbrshiftsPerDay * 2); k < shiftsOneWeek; k++) { // on parcours 2 jours samedi dim
 					c11.setCoefficient(matrice[i][j * shiftsOneWeek + k], 1);
 					c12.setCoefficient(matrice[i][j * shiftsOneWeek + k], 1);
-				System.out.println("  wekend :"+(j*shiftsOneWeek+k));
+					//System.out.println("  wekend :"+(j*shiftsOneWeek+k));
 				}
 
 				
@@ -290,29 +284,7 @@ public class NurseSolverLinear implements SolverInterface {
 		}
 		
 /*********************************/
-/*		
-		// à revoir
-		//C13
-		MPVariable[][] WE = new MPVariable[nbr_inf][4];
-		int num_semaine = 21; // 7 jours 3 tranches
-		MPVariable[] t = new MPVariable[1];
-		t[0] = solver.makeIntVar(1, 1, "1");
-		// C13 tout personnel doit faire au moins un weekend de congÃ©
-		for (int i = 0; i < nbr_inf; i++) {
-		MPConstraint c13 = solver.makeConstraint(0, 3);
-		int num_days=28*3;
-		for (int j = 0; j < num_days / num_semaine; j++) {
-		int tt = 0;
-		for (int k = num_semaine - (nbrTrancheParJour * 2); k < num_semaine; k++) {
-		if(matrice[i][j * num_semaine + k] == t[0])
-		tt = 1;
-		}
-		WE[i][j] = solver.makeIntVar(tt, tt, "we[" + i + "," + j+ "]");
-		c13.setCoefficient(WE[i][j], 1);
-		}
-		}
-		/*
-		/************************************/
+
 		
 		
 		
@@ -325,11 +297,16 @@ public class NurseSolverLinear implements SolverInterface {
 
 		final MPSolver.ResultStatus resultStatus = solver.solve();
 
-		if (resultStatus != MPSolver.ResultStatus.OPTIMAL) {
+		if (resultStatus == MPSolver.ResultStatus.INFEASIBLE) {
 			System.err
-					.println("The problem does not have an optimal solution!");
+					.println("The problem does not have a solution!");
 			return;
 		} else {
+
+			if (resultStatus != MPSolver.ResultStatus.OPTIMAL) 
+				System.err.println("The problem does not have a solution!");
+			
+			
 
 			for (int i = 0; i < nbrInfirmier; i++) {
 				for (int j = 0; j < totalShiftsPerMonth; j++) {

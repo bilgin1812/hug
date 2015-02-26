@@ -27,7 +27,7 @@ public class Main {
 
 	public static void main(String[] args) throws ParseException {
 		int nbr_tranches = 28 * 3;
-		int nbr_inf = 40; // nombre d'infirmieres
+		int nbr_inf = 100; // nombre d'infirmieres
 		int num = 2; // combien d'horaires a afficher
 		String filename_infirmier = "inf.json";
 		String filename_contraintes = "Contraintes.json";
@@ -79,9 +79,9 @@ public class Main {
 		
 		 
 
-		mySolver.solve(1, 2, "GLOP_LINEAR_PROGRAMMING");  //<-- recommandé (celui fait par google)
+		//mySolver.solve(1, 2, "GLOP_LINEAR_PROGRAMMING");  //<-- recommandé (celui fait par google)
 		//mySolver.solve(1, 2, "GLPK_LINEAR_PROGRAMMING");
-		//mySolver.solve(1, 2, "CLP_LINEAR_PROGRAMMING");
+		mySolver.solve(1, 2, "CLP_LINEAR_PROGRAMMING");
 
 	}
 
