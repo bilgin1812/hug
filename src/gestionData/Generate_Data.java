@@ -50,9 +50,9 @@ public class Generate_Data {
 		int i;
 		for( i=0 ; i<nbrInf ; i++){
 			Nurse inf= new Nurse(i);
-			if(i%3 ==0)
-				inf.taux_active =100;
-				inf.taux_active =100;
+			if(i%4 ==0)
+				inf.taux_active =80;
+			inf.taux_active =100;
 			/*********
 			Contraintes :
 				-1 = ne pas travailler (vacances)
@@ -60,11 +60,14 @@ public class Generate_Data {
 				1 = j'ai pas trop envie de travailler
 				5 = j'ai très envie de travailler
 			*****************/
+			
+			Random rn=  new Random();
+			int p= rn.nextInt(nbrTranches);
+			//System.out.println("P:"+p);
 			for(int k=0 ;k<nbrTranches ; k++){
-				if(k % 20 == 1)
-					inf.preferences.add(0);
-				else if( k% 20==2)
-					inf.preferences.add(0);
+				if(k ==p)
+					inf.preferences.add(1);
+		
 				else inf.preferences.add(0);
 			}
 			String[] cle= {"formateur", "novice", "debutant", "chef"};
@@ -74,7 +77,7 @@ public class Generate_Data {
 			
 			listInf.add(inf);
 		}
-			System.out.println(+listInf.size()+" infirmiers generes");
+			System.out.println(+listInf.size()+" infirmiers crés");
 		return listInf;
 		}
 	 

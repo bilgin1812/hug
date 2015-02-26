@@ -27,7 +27,7 @@ public class Main {
 
 	public static void main(String[] args) throws ParseException {
 		int nbr_tranches = 28 * 3;
-		int nbr_inf = 30; // nombre d'infirmieres
+		int nbr_inf = 40; // nombre d'infirmieres
 		int num = 2; // combien d'horaires a afficher
 		String filename_infirmier = "inf.json";
 		String filename_contraintes = "Contraintes.json";
@@ -59,7 +59,7 @@ public class Main {
 		/************** lire les fichiers json ****************************************************************/
 		/* lire fichier json pour recuperer les infirmiers */
 
-		ArrayList<Nurse> listInf = ReadJson.readJsonInf("infirmiers.json");
+		ArrayList<Nurse> listInf = ReadJson.readJsonInf("inf.json");  //"infirmiersGeneres.json" pref mixtes
 		Contstraint contraintes1 = ReadJson
 				.readJsonContraintes(filename_contraintes);
 		ArrayList<ConstraintPerShift> list_contrainte_tranche = ReadJson
@@ -67,14 +67,15 @@ public class Main {
 
 		/****************************************SOLVER *********************************************************/
 
-		//Afficher.AfficheInfirmiers(listInf);
+		Afficher.AfficheInfirmiers(listInf_Aletoire);
 		//solver par contrainte
 		//NurseSolver_par_contrainte mySolver1= new NurseSolver_par_contrainte(listInf_Aletoire);
 		//mySolver.solve(n, num);$
 
 		/* SOLVER LINEAR */
-		NurseSolverLinear mySolver = new NurseSolverLinear(listInf, contraintes1,
-				list_contrainte_tranche);
+	//	NurseSolverLinear mySolver = new NurseSolverLinear(listInf_Aletoire, contraintes1,list_contrainte_tranche);
+		
+		NurseSolverLinear mySolver = new NurseSolverLinear(listInf_Aletoire, contraintes1,list_contrainte_tranche);
 		
 		 
 
