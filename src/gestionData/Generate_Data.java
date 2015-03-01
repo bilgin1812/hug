@@ -66,7 +66,7 @@ public class Generate_Data {
 			//System.out.println("P:"+p);
 			for(int k=0 ;k<nbrTranches ; k++){
 				if(k ==p)
-					inf.preferences.add(1);
+					inf.preferences.add(0);
 		
 				else inf.preferences.add(0);
 			}

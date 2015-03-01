@@ -27,7 +27,7 @@ public class Main {
 
 	public static void main(String[] args) throws ParseException {
 		int nbr_tranches = 28 * 3;
-		int nbr_inf = 20; // nombre d'infirmieres
+		int nbr_inf = 50; // nombre d'infirmieres
 		int num = 2; // combien d'horaires a afficher
 		String filename_infirmier = "inf.json";
 		String filename_contraintes = "Contraintes.json";
@@ -40,7 +40,7 @@ public class Main {
 		contraintes.toutes_inf_nuit = 1; // c10 tous les inf au moins une nuit
 		contraintes.travail_cons_6jours = 6; // c12 pas de travail cons plus que 6 jours 
 		contraintes.weekend_conge_min = 1; // c13 au moins 1 weekend congé
-		contraintes.seri_nuits_taux80 = 0; // c6 pour taux 80
+		contraintes.seri_nuits_taux80 = 6; // c6 pour taux 80
 		contraintes.seri_nuits_taux100 = 0; // c5 pour taux 100
 		contraintes.nbr_tranche_par_jour = 1; // nombre tranche par jour par infirmier
 
@@ -67,7 +67,7 @@ public class Main {
 
 		/****************************************SOLVER *********************************************************/
 
-		Afficher.AfficheInfirmiers(listInf_Aletoire);
+		//Afficher.AfficheInfirmiers(listInf_Aletoire);
 		//solver par contrainte
 		//NurseSolver_par_contrainte mySolver1= new NurseSolver_par_contrainte(listInf_Aletoire);
 		//mySolver.solve(n, num);$
@@ -80,6 +80,7 @@ public class Main {
 		 
 		//N solv = new N(listInf_Aletoire);
 		//solv.solve( );
+		
 		mySolver.solve( "GLOP_LINEAR_PROGRAMMING");  //<-- recommandé (celui fait par google)
 		//mySolver.solve(1, 2, "GLPK_LINEAR_PROGRAMMING");
 		//mySolver.solve(1, 2, "CLP_LINEAR_PROGRAMMING");
