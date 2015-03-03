@@ -37,8 +37,8 @@ static public Contstraint readJsonContraintes(String file) throws org.json.simpl
         cont.seri_nuits_taux100  = Integer.valueOf(  cont_obj.get("seri_nuits_taux100").toString());
         cont.seri_nuits_taux80   = Integer.valueOf(  cont_obj.get("seri_nuits_taux80").toString());
         cont.toutes_inf_nuit     = Integer.valueOf(  cont_obj.get("toutes_inf_nuit").toString());
-        cont.travail_cons_6jours = Integer.valueOf(  cont_obj.get("travail_cons_6jours").toString());
-        cont.weekend_conge_min   = Integer.valueOf(  cont_obj.get("weekend_conge_min").toString());
+        cont.maxConsecutiveWork = Integer.valueOf(  cont_obj.get("travail_cons_6jours").toString());
+        cont.nbMinWeekendHoliday   = Integer.valueOf(  cont_obj.get("weekend_conge_min").toString());
 
     } catch (FileNotFoundException e) {
         e.printStackTrace();

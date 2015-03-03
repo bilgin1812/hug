@@ -27,7 +27,7 @@ public class Main {
 
 	public static void main(String[] args) throws ParseException {
 		int nbr_tranches = 28 * 3;
-		int nbr_inf = 50; // nombre d'infirmieres
+		int nbr_inf =50; // nombre d'infirmieres
 		int num = 2; // combien d'horaires a afficher
 		String filename_infirmier = "inf.json";
 		String filename_contraintes = "Contraintes.json";
@@ -38,11 +38,11 @@ public class Main {
 		Contstraint contraintes = new Contstraint();
 		contraintes.conge_hebdomaire = 8; // c11 8 congé hebdomaire sur 4 semaines
 		contraintes.toutes_inf_nuit = 1; // c10 tous les inf au moins une nuit
-		contraintes.travail_cons_6jours = 6; // c12 pas de travail cons plus que 6 jours 
-		contraintes.weekend_conge_min = 1; // c13 au moins 1 weekend congé
-		contraintes.seri_nuits_taux80 = 6; // c6 pour taux 80
-		contraintes.seri_nuits_taux100 = 0; // c5 pour taux 100
-		contraintes.nbr_tranche_par_jour = 1; // nombre tranche par jour par infirmier
+		contraintes.maxConsecutiveWork = 6; // c12 pas de travail cons plus que 6 jours 
+		contraintes.nbMinWeekendHoliday= 1; // c13 au moins 1 weekend congé
+		contraintes.seri_nuits_taux80 = 5; // c6 pour taux 80
+		contraintes.seri_nuits_taux100 = 6; // c5 pour taux 100
+		contraintes.nbrShiftPerDay = 1; // nombre tranche par jour par infirmier
 
 		ArrayList<Nurse> listInf_Aletoire = Generate_Data.CeateInfList(
 				nbr_inf, nbr_tranches);
@@ -81,7 +81,7 @@ public class Main {
 		//N solv = new N(listInf_Aletoire);
 		//solv.solve( );
 		
-		mySolver.solve( "GLOP_LINEAR_PROGRAMMING");  //<-- recommandé (celui fait par google)
+		mySolver.solve( "GLOP_LINEAR_PROGRAMMING");  //<-- recommended (done by  google)
 		//mySolver.solve(1, 2, "GLPK_LINEAR_PROGRAMMING");
 		//mySolver.solve(1, 2, "CLP_LINEAR_PROGRAMMING");
 

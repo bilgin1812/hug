@@ -1,0 +1,55 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "id": "/",
+  "type": "object",
+  "properties": {
+    "List_infirmiers": {
+      "id": "List_infirmiers",
+      "type": "array",
+      "items": {
+        "id": "1",
+        "type": "object",
+        "properties": {
+          "id": {
+            "id": "id",
+            "type": "integer"
+          },
+          "taux": {
+            "id": "taux",
+            "type": "integer"
+          },
+          "competences": {
+            "id": "competences",
+            "type": "object",
+            "properties": {
+              "formateur": {
+                "id": "formateur",
+                "type": "integer"
+              },
+              "novice": {
+                "id": "novice",
+                "type": "integer"
+              },
+              "debutant": {
+                "id": "debutant",
+                "type": "integer"
+              },
+              "chef": {
+                "id": "chef",
+                "type": "integer"
+              }
+            }
+          },
+          "preferences": {
+            "id": "preferences",
+            "type": "array",
+            "items": {
+              "id": "83",
+              "type": "integer"
+            }
+          }
+        }
+      }
+    }
+  }
+}

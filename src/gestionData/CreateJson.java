@@ -61,8 +61,8 @@ public class CreateJson {
 			obj = new JSONObject();
 			obj.put("conge_hebdomaire", cont.conge_hebdomaire);
 			obj.put("toutes_inf_nuit", cont.toutes_inf_nuit);
-			obj.put("travail_cons_6jours", cont.travail_cons_6jours);
-			obj.put("weekend_conge_min", cont.weekend_conge_min);
+			obj.put("travail_cons_6jours", cont.maxConsecutiveWork);
+			obj.put("weekend_conge_min", cont.nbMinWeekendHoliday);
 			obj.put("seri_nuits_taux80", cont.seri_nuits_taux80);
 			obj.put("seri_nuits_taux100", cont.seri_nuits_taux100);
 

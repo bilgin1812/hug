@@ -65,7 +65,7 @@ public class Generate_Data {
 			int p= rn.nextInt(nbrTranches);
 			//System.out.println("P:"+p);
 			for(int k=0 ;k<nbrTranches ; k++){
-				if(k ==p)
+				if(k%(i+1)==1)
 					inf.preferences.add(0);
 		
 				else inf.preferences.add(0);
@@ -77,7 +77,7 @@ public class Generate_Data {
 			
 			listInf.add(inf);
 		}
-			System.out.println(+listInf.size()+" infirmiers crés");
+			
 		return listInf;
 		}
 	 

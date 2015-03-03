@@ -1,0 +1,37 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "id": "/",
+  "type": "object",
+  "properties": {
+    "contraintes": {
+      "id": "contraintes",
+      "type": "object",
+      "properties": {
+        "toutes_inf_nuit": {
+          "id": "toutes_inf_nuit",
+          "type": "integer"
+        },
+        "seri_nuits_taux80": {
+          "id": "seri_nuits_taux80",
+          "type": "integer"
+        },
+        "seri_nuits_taux100": {
+          "id": "seri_nuits_taux100",
+          "type": "integer"
+        },
+        "conge_hebdomaire": {
+          "id": "conge_hebdomaire",
+          "type": "integer"
+        },
+        "weekend_conge_min": {
+          "id": "weekend_conge_min",
+          "type": "integer"
+        },
+        "travail_cons_6jours": {
+          "id": "travail_cons_6jours",
+          "type": "integer"
+        }
+      }
+    }
+  }
+}
