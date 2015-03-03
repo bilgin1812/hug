@@ -60,7 +60,7 @@ public class NurseSolverConstrainte implements SolverInterface {
 		// nombre infirmiers par jour
 		int[] nb_inf_jour = new int[num_tranches];
 		for (int i = 0; i < num_tranches; i++)
-			nb_inf_jour[i] =(int) (Math.random() * (nbr_inf - 3)) + 1;
+			nb_inf_jour[i] =12;//(int)(this.listInf.size()*0.15) ;//(int) (Math.random() * (nbr_inf - 3)) + 1;
 
 		IntVar[][] matrice = new IntVar[nbr_inf][num_tranches];
 		IntVar[] matrice_flat = new IntVar[num_tranches * nbr_inf];

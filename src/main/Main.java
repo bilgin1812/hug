@@ -47,7 +47,7 @@ public class Main {
 		ArrayList<Nurse> listInf_Aletoire = Generate_Data.CeateInfList(
 				nbr_inf, nbr_tranches);
 		ArrayList<ConstraintPerShift> listCont_Aletoire = Generate_Data
-				.CeateTrancheList(nbr_inf, nbr_tranches);
+				.CreateShitfsList(nbr_inf, nbr_tranches);
 
 		/************** générations des fichiers json ***********************************************************/
 

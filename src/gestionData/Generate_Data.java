@@ -12,7 +12,7 @@ public class Generate_Data {
 	
 	/* Create  liste infirmiers   aléatoire*/	
 	@SuppressWarnings("unchecked")
-	static public ArrayList<ConstraintPerShift>  CeateTrancheList(int nbrInf, int nbrTranches){
+	static public ArrayList<ConstraintPerShift>  CreateShitfsList(int nbrInf, int nbrTranches){
 		int nbrCompetences=4;
 		//public int type_tranche;  // 1: matin 2: 15h 3 :nuit
 	//	public int nombre_min_inf;
@@ -23,7 +23,7 @@ public class Generate_Data {
 		int i;
 		for( i=0 ; i<nbrTranches ; i++){
 			ConstraintPerShift tranche= new ConstraintPerShift(i%3); // i%3 donne 0,1,2 donc type de tranche
-			tranche.nombre_min_inf= 2;//rn.nextInt()*10;
+			tranche.nombre_min_inf= 5;//rn.nextInt()*10;
 			if(tranche.nombre_min_inf <=1)
 				tranche.nombre_min_inf++;
 	
@@ -65,9 +65,13 @@ public class Generate_Data {
 			int p= rn.nextInt(nbrTranches);
 			//System.out.println("P:"+p);
 			for(int k=0 ;k<nbrTranches ; k++){
-				if(k%(i+1)==1)
-					inf.preferences.add(0);
-		
+				if(k==i+1)
+					inf.preferences.add(1);
+				else if(k==i+2)
+					inf.preferences.add(2);
+				else if(k==i+3)
+					inf.preferences.add(3);
+				
 				else inf.preferences.add(0);
 			}
 			String[] cle= {"formateur", "novice", "debutant", "chef"};

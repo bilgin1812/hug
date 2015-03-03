@@ -92,21 +92,21 @@ public class NurseSolverLinear implements SolverInterface {
 		int jc = this.constraints.conge_hebdomaire;//  8 days holiday per month
 		int nbrMaxNight = this.constraints.seri_nuits_taux100 ; //6 series of night for 100% 
 		
-		int nbrJours = 28; // scheduling  for one month 
+		int nbrDaysPerMonth = 28; // scheduling  for one month 
 		/* 3 shifts per Day
 		 *Shift 1 = morning
 		 *Shift 2 = afternoon
 		 *Shift 3 = night
 		 */
 		int nbrshiftsPerDay = 3;
-		int nbrInfirmier = this.listInf.size();
-		int totalShiftsPerMonth = nbrJours * nbrshiftsPerDay;
+		int nbrNurses = this.listInf.size();
+		int totalShiftsPerMonth = nbrDaysPerMonth * nbrshiftsPerDay;
 		int[] nbrInfPerDay = new int[totalShiftsPerMonth];
 		
 		if(DEBUG)
 			System.out.println(" Scheduling "+this.listInf.size()+" nurses:");
 		for (int i = 0; i < totalShiftsPerMonth; i++) {
-			nbrInfPerDay[i] = 5;// (int) (Math.random() * (5)+1);
+			nbrInfPerDay[i] = 6;// (int) (Math.random() * (5)+1);
 			if (i == 0)
 				System.out.print("   ");
 
@@ -119,50 +119,64 @@ public class NurseSolverLinear implements SolverInterface {
 		}
 		System.out.println();
 
-		MPVariable[][] matrice = new MPVariable[nbrInfirmier][totalShiftsPerMonth];
+		MPVariable[][] matrice = new MPVariable[nbrNurses][totalShiftsPerMonth];
 
 		MPObjective obj = solver.objective();
 		// On applique les préférences des infirmières à la matrice de départ
-		for (int i = 0; i < nbrInfirmier; i++)
+		for (int i = 0; i < nbrNurses; i++)
 			for (int j = 0; j < totalShiftsPerMonth; j++) {
 
-				// 1 = travaille, 0 = travaille pas
-				// on créer une matrice de qui sera composé de 1 ou 0
+				// 1 = works, 0 = don't work
+				// creation the matrix init
 				matrice[i][j] = solver.makeIntVar(0, 1, "m[" + i + "," + j
 						+ "]");
 
 				// pref va du plus grand au plus petit
-				// 5 = je veux vraiment travailler, 1 = je veux pas trop, 0 =
-				// c'est égal
+				// 5 = i want to work, 1 = i doesn't wan tot work, 0 =not pref.
 				if (Integer.valueOf(listInf.get(i).preferences.elementAt(j)
 						.toString()) != -1) {
-					// System.out.println("OBJJJJ"+listInf.get(i).preferences.elementAt(j)
-					// .toString());
 					obj.setCoefficient(matrice[i][j], Integer.valueOf(listInf
 							.get(i).preferences.elementAt(j).toString()));
 				} else {
 					// -1 = don't work (holiday)
 					// C4 employee can't work at holidays 
 					obj.setCoefficient(matrice[i][j], -infinity);
-					// on met une valeure très basse pour être sûr qu'il ne
-					// travaillera pas
+					// with -infinty we are sure that employee doesn't work
 				}
+				
 			}
 		obj.setMaximization();
+		
+
 
 /**********************CONSTRAINTS ********************************************************/
+		// Nbr competence per Shift
+		String[] comp={"formateur", "novice", "debutant", "chef"};
+		for (int i = 0; i < totalShiftsPerMonth; i++) {
+			for (int k = 0; k < 4; k++) {
+
+			MPConstraint c0 = solver.makeConstraint(
+			listConstraintsPerShift.get(k).nomb_min_comp.get(comp[k]),
+			listConstraintsPerShift.get(k).nomb_min_comp.get(comp[k]) + 20);
+				// contrainte competence
+				for (int j = 0; j < nbrNurses; j++) {
+					if (listInf.get(j).competences.get(comp[k]) != 0)
+						c0.setCoefficient(matrice[j][i], 1);
+				}
+			}
+		}
 
 		//  minimum number of nurse per shift
 		for (int i = 0; i < totalShiftsPerMonth; i++) {
 			MPConstraint c1 = solver.makeConstraint(nbrInfPerDay[i], nbrInfPerDay[i]+20); 
 																																						// deleted
-			for (int j = 0; j < nbrInfirmier; j++) {
+			for (int j = 0; j < nbrNurses; j++) {
 				c1.setCoefficient(matrice[j][i], 1);
 			}
 		}
 
 		// C2 :Every nurse can have one shift per day  
-		for (int j = 0; j < nbrInfirmier; j++) {
+		for (int j = 0; j < nbrNurses; j++) {
 			for (int i = 0; i < totalShiftsPerMonth; i += nbrshiftsPerDay) {
 				MPConstraint c2 = solver.makeConstraint(0, 1);
 				
@@ -174,36 +188,36 @@ public class NurseSolverLinear implements SolverInterface {
 				}
 			}
 		}
-
-		for (int l = 0; l < nbrInfirmier; l++)
+		nbrMaxNight = 7;
+		for (int l = 0; l < nbrNurses; l++)
 			// C5 series of night 3-5 for nurse 100%
 			if (listInf.get(l).taux_active == 100) { 
 				for (int j = 0; j < totalShiftsPerMonth
 						- (nbrshiftsPerDay * nbrMaxNight); j++) {
-					MPConstraint c5 = solver.makeConstraint(0, 6);
+					MPConstraint c5 = solver.makeConstraint(0, nbrMaxNight-1);
 					for (int k = 0; k < nbrMaxNight; k++) {
 						c5.setCoefficient(matrice[l][nbrshiftsPerDay * k + j+ 2], 1);
 					}
 				}
 
-			} else { // C6 Série nuits de 2 à 4 nuits / 4 sem. // 80% int
-				nbrMaxNight = 5;
+			} else { // C6 night series  2 to 4 nights / 4 weeks. // 80% int
+				nbrMaxNight = 6;
 				for (int j = 0; j < totalShiftsPerMonth
 						- (nbrshiftsPerDay * nbrMaxNight); j++) {
-					MPConstraint c5 = solver.makeConstraint(0, 5);
+					MPConstraint c5 = solver.makeConstraint(0, nbrMaxNight-1);
 					for (int k = 0; k < nbrMaxNight; k++) {
 						c5.setCoefficient(matrice[l][nbrshiftsPerDay * k + j+ 2], 1);
 					}
 				}
 			}
 
-		// C7 2 congé minimum après une série de nuits
+		// C7 2 holidays after of one series of night
 		int repos = 3;
-		int nb_nuits = 5;
-		for (int i = 0; i < nbrInfirmier; i++) {
-			for (int j = 0; j < totalShiftsPerMonth- (nbrshiftsPerDay * nb_nuits); j++) {
+		int nbrNightsSeries = 5;
+		for (int i = 0; i < nbrNurses; i++) {
+			for (int j = 0; j < totalShiftsPerMonth- (nbrshiftsPerDay * nbrNightsSeries); j++) {
 				MPConstraint c7 = solver.makeConstraint(-1, 4);
-				for (int k = 0; k < nb_nuits; k++) {
+				for (int k = 0; k < nbrNightsSeries; k++) {
 					if (k== 3)
 						c7.setCoefficient(matrice[i][nbrshiftsPerDay * k + j+ 2], -1);
 					else
@@ -213,7 +227,7 @@ public class NurseSolverLinear implements SolverInterface {
 		}
 
 		// C8 Chaque infirmière doit faire une nuit au minimum
-		for (int i = 0; i < nbrInfirmier; i++) {
+		for (int i = 0; i < nbrNurses; i++) {
 			MPConstraint c8 = solver.makeConstraint(0, 28);
 			for (int j = 0; j < totalShiftsPerMonth / nbrshiftsPerDay; j = j
 					+ nbrshiftsPerDay) {
@@ -223,7 +237,7 @@ public class NurseSolverLinear implements SolverInterface {
 		}
 
 		// C9 8 jours de congé
-		for (int i = 0; i < nbrInfirmier; i++) {
+		for (int i = 0; i < nbrNurses; i++) {
 			MPConstraint c9 = solver.makeConstraint(0, totalShiftsPerMonth-(jc * nbrshiftsPerDay));//60
 			for (int j = 0; j < totalShiftsPerMonth; j++) {
 				 c9.setCoefficient(matrice[i][j], 1);
@@ -234,7 +248,7 @@ public class NurseSolverLinear implements SolverInterface {
 		// 100%
 		jtl = this.constraints.maxConsecutiveWork;// 6;
 		for (int i = 0; i < (totalShiftsPerMonth - jtl) / nbrshiftsPerDay; i++) {
-			for (int j = 0; j < nbrInfirmier; j++) {
+			for (int j = 0; j < nbrNurses; j++) {
 				MPConstraint c10 = solver.makeConstraint(0, jtl);
 				for (int k = 0; k < jtl; k++) {
 
@@ -249,53 +263,26 @@ public class NurseSolverLinear implements SolverInterface {
 
 		int shiftsOneWeek = 21; // 7 jours 3 tranches // C11tout
 
-		// TO DO
-		MPVariable[] P = solver.makeIntVarArray(4 * nbrInfirmier, 0, 1); //
+		MPVariable[] P = solver.makeIntVarArray(4 * nbrNurses, 0, 1); //
 		// everyone hase at leat one weekend holiday
-		MPConstraint c13;
-		MPConstraint	c14;
-		MPVariable[] K = null;
-		for (int i = 0; i < nbrInfirmier; i++) {
+		for (int i = 0; i < nbrNurses; i++) {		
 			
-			if(i==36)
-			{
-					c14 = solver.makeConstraint(0, 3);
-				K = solver.makeIntVarArray(4, 0, 1);
-
-				for (int j = 0; j < totalShiftsPerMonth / shiftsOneWeek; j++) { 									
-					
-					MPConstraint c15 = solver.makeConstraint(-1, 0);
-					MPConstraint c16 = solver.makeConstraint(0, 1);
-					c15.setCoefficient(K[j], -2);
-					c16.setCoefficient(K[j], -1);
-
-					// les shifts of weekend
-					for (int k = shiftsOneWeek - (nbrshiftsPerDay * 2); k < shiftsOneWeek; k++) { 
-						c15.setCoefficient(matrice[36][j * shiftsOneWeek + k], 1);
-						c16.setCoefficient(matrice[36][j * shiftsOneWeek + k], 1);
-						// System.out.println("  wekend :"+(j*shiftsOneWeek+k));
-					}
-					c14.setCoefficient(K[j], 1);
-				}
-			
-				
-				}
-			
-			
-			 c13 = solver.makeConstraint(0, 3,"c13"+i);
+			MPConstraint c13 = solver.makeConstraint(1,3,"c13"+i);
 			//MPVariable[] P1 = solver.makeIntVarArray(4, 0, 1); //
 			// totalShiftsPerMonth / shiftsOneWeek = 4
 			for (int j = 0; j < totalShiftsPerMonth / shiftsOneWeek; j++) { 									
-				P[i*4+j].setInteger(true);
-				MPConstraint c11 = solver.makeConstraint(-1, 0);
-				MPConstraint c12 = solver.makeConstraint(0, 1);
-				c11.setCoefficient(P[i * 4 + j], -2);
+				//P[i*4+j].setInteger(true);
+				MPConstraint c11 = solver.makeConstraint(-infinity,0 ,"c11"+i+j);
+				MPConstraint c12 = solver.makeConstraint(0, infinity,"c12"+i+j);
+				// BUG : c11.setCoefficient(P[i * 4 + j], -2); bu
+				c11.setCoefficient(P[i * 4 + j], -1);
+				c11.setCoefficient(P[i * 4 + j], -1);
 				c12.setCoefficient(P[i * 4 + j], -1);
 
 				// les shifts of weekend
-				for (int k = shiftsOneWeek - (nbrshiftsPerDay * 2); k < shiftsOneWeek; k++) { 
-					c11.setCoefficient(matrice[i][j * shiftsOneWeek + k], 1);
-					c12.setCoefficient(matrice[i][j * shiftsOneWeek + k], 1);
+				for (int q = shiftsOneWeek - (nbrshiftsPerDay * 2); q < shiftsOneWeek; q++) { 
+					c11.setCoefficient(matrice[i][j * shiftsOneWeek + q], 1);
+					c12.setCoefficient(matrice[i][j * shiftsOneWeek + q], 1);
 					// System.out.println("  wekend :"+(j*shiftsOneWeek+k));
 				}
 				c13.setCoefficient(P[i*4+j], 1);
@@ -313,14 +300,24 @@ public class NurseSolverLinear implements SolverInterface {
 			System.err
 					.println("!!!!!!!!!!!The problem does not have a solution!");
 			return;
+		}
+		
+	    // Verify that the solution satisfies all constraints (when using solvers
+	    // others than GLOP_LINEAR_PROGRAMMING, this is highly recommended!).
+		else  if (!solver.verifySolution(/*tolerance=*/1e-7, /*logErrors=*/true)) {
+	      System.err.println("The solution returned by the solver violated the"
+	                         + " problem constraints by at least 1e-7");
+	      return;
+	    }
 
-		} else {
+		
+		 else {
 
 			if (resultStatus != MPSolver.ResultStatus.OPTIMAL)
 				System.err
 						.println("!!!!!!!!!The problem does not have a solution!");
 
-			for (int i = 0; i < nbrInfirmier; i++) {
+			for (int i = 0; i < nbrNurses; i++) {
 				for (int j = 0; j < totalShiftsPerMonth; j++) {
 					if (j == 0) {
 						if (i < 10)
@@ -355,7 +352,7 @@ public class NurseSolverLinear implements SolverInterface {
 			/************** test c2 ********/
 			boolean testC2 = true;
 			for (int i = 0; i < totalShiftsPerMonth; i += nbrshiftsPerDay) {
-				for (int j = 0; j < nbrInfirmier; j++) {
+				for (int j = 0; j < nbrNurses; j++) {
 
 					int m = 0;
 					for (int k = 0; k < nbrshiftsPerDay; k++) {
@@ -375,7 +372,7 @@ public class NurseSolverLinear implements SolverInterface {
 			/************** test c9 ********/
 			boolean testC9 = true;
 			int totalShiftdonePerInfirmier = 0;
-			for (int j = 0; j < nbrInfirmier; j++) {
+			for (int j = 0; j < nbrNurses; j++) {
 				for (int i = 0; i < totalShiftsPerMonth; i++) {
 					totalShiftdonePerInfirmier += (matrice[j][i]
 							.solutionValue());
@@ -390,7 +387,7 @@ public class NurseSolverLinear implements SolverInterface {
 
 			/***************** /* test c13 */
 			boolean testC13 = true;
-			for (int i = 0; i < nbrInfirmier; i++) {
+			for (int i = 0; i < nbrNurses; i++) {
 				boolean b = false;
 				// number of weeks = totalShifts/ shiftsOneWeek
 				int countHildayWeekEnd = 0;
@@ -423,23 +420,11 @@ public class NurseSolverLinear implements SolverInterface {
 			this.exportModelinFile(solver.exportModelAsLpFormat(true));
 			if(DEBUG){
 				System.out.println("C2: " + testC2 + " C9: " + testC9 + " C13: "+ testC13);	
-			/*	System.out.println(P[144].solutionValue()+"_"+P[145].solutionValue()+"_"+P[146].solutionValue()+"_"+P[147].solutionValue()+"_");
-				System.out.println(K[0].solutionValue()+"_"+K[1].solutionValue()+"_"+K[2].solutionValue()+"_"+K[3].solutionValue()+"_");
-				
-				System.out.print("**"+matrice[36][36].solutionValue());
-				System.out.print("**"+matrice[36][37].solutionValue());
-				System.out.print("**"+matrice[36][38].solutionValue());
-				System.out.print("**"+matrice[36][39].solutionValue());
-				System.out.print("**"+matrice[36][40].solutionValue());
-				System.out.print("**"+matrice[36][41].solutionValue());
-				
-				//System.out.println("c13 "+solver.lookupConstraintOrNull("c1336").getCoefficient(matrice[36][37]));
-				//System.out.println("c13 "+solver.lookupConstraintOrNull("c1336").getCoefficient(matrice[36][38]));
-				//System.out.println("c13 "+solver.lookupConstraintOrNull("c1336").getCoefficient(matrice[36][39]));
-				//System.out.println("c13 "+solver.lookupConstraintOrNull("c1336").getCoefficient(matrice[36][40]));
-				//System.out.println("c13 "+solver.lookupConstraintOrNull("c1336").getCoefficient(matrice[36][41]));
-				 * 
-				 */
+			/*	
+			 * We can consult a variable or constraint
+			 * System.out.println(P[144].solutionValue()+"_"+P[145].solutionValue()+"_"+P[146].solutionValue()+"_"+P[147].solutionValue()+"_");
+			 *System.out.println("c13 "+solver.lookupConstraintOrNull("c1336").getCoefficient(matrice[36][37]));
+		  */
 			}
 			System.out.println(" Result of Solver :  " + resultStatus);
 		}
