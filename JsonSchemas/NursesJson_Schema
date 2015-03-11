@@ -3,8 +3,8 @@
   "id": "/",
   "type": "object",
   "properties": {
-    "List_infirmiers": {
-      "id": "List_infirmiers",
+    "List_Nurses": {
+      "id": "List_Nurses",
       "type": "array",
       "items": {
         "id": "1",
@@ -14,12 +14,12 @@
             "id": "id",
             "type": "integer"
           },
-          "taux": {
-            "id": "taux",
+          "activiyRate": {
+            "id": "activiyRate",
             "type": "integer"
           },
-          "competences": {
-            "id": "competences",
+          "skills": {
+            "id": "skills",
             "type": "object",
             "properties": {
               "formateur": {

@@ -1,4 +1,4 @@
-
+/************this solver is abondoned because it doesn't OPTIMISE *************/
 /*
  * 4 niveaux de qualifications des employés (novice, intermédiaire, préformation, formé)
 ombre fixe d’employés avec composition donnée (uniquement variation pendant les vacances d’été i.e. deux modes)
@@ -23,6 +23,7 @@ package solve;
 import java.util.ArrayList;
 
 import ressource.Nurse;
+
 import com.google.ortools.constraintsolver.DecisionBuilder;
 import com.google.ortools.constraintsolver.IntExpr;
 import com.google.ortools.constraintsolver.IntVar;
@@ -37,6 +38,11 @@ public class NurseSolverConstrainte implements SolverInterface {
 	public NurseSolverConstrainte(ArrayList<Nurse> listInf){
 		this.listInf=listInf;
 	}
+	public void  addConstraint()
+	{
+		//TO DO
+	}
+
 	public  void solve(int n, int num) {
 
 		Solver solver = new Solver("NurseSolver");
@@ -131,7 +137,7 @@ public class NurseSolverConstrainte implements SolverInterface {
 		for (int i = 0; i < num_tranches - jtl; i++) {
 			IntVar[] row = new IntVar[nbrJours];
 			for (int j = 0; j < nbr_inf; j++) {
-				if(this.listInf.get(j).taux_active == 100){
+				if(this.listInf.get(j).activiyRate == 100){
 				for (int k = 0; k < jtl; k++) {
 					// System.out.println("i:"+i+"j:"+j+"k:"+k);
 					row[k] = matrice[j][i + k];
@@ -227,6 +233,12 @@ public class NurseSolverConstrainte implements SolverInterface {
 		System.out.println("Failures: " + solver.failures());
 		System.out.println("Branches: " + solver.branches());
 		System.out.println("Wall time: " + solver.wallTime() + "ms");
+	}
+
+	@Override
+	public void solve(String solverType, Boolean DEBUG, Boolean exportModel) {
+		// TODO Auto-generated method stub
+		
 	}
 
 

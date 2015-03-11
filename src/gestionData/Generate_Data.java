@@ -22,17 +22,17 @@ public class Generate_Data {
 			
 		int i;
 		for( i=0 ; i<nbrTranches ; i++){
-			ConstraintPerShift tranche= new ConstraintPerShift(i%3); // i%3 donne 0,1,2 donc type de tranche
-			tranche.nombre_min_inf= 5;//rn.nextInt()*10;
-			if(tranche.nombre_min_inf <=1)
-				tranche.nombre_min_inf++;
+			ConstraintPerShift tranche= new ConstraintPerShift(); // i%3 donne 0,1,2 donc type de tranche
+			tranche.numberMinSkillsSum= 5;//rn.nextInt()*10;
+			if(tranche.numberMinSkillsSum <=1)
+				tranche.numberMinSkillsSum++;
 	
 			String[] cle= {"formateur", "novice", "debutant", "chef"};
 			for(int k=0 ;k<nbrCompetences ; k++){
 				if(rn.nextBoolean())
-					tranche.nomb_min_comp.put(cle[k], 0);
+					tranche.numberMinSkills.put(cle[k], 0);
 				else
-					tranche.nomb_min_comp.put(cle[k], 0);
+					tranche.numberMinSkills.put(cle[k], 0);
 			}
 			listTranches.add(tranche);
 		}
@@ -51,32 +51,35 @@ public class Generate_Data {
 		for( i=0 ; i<nbrInf ; i++){
 			Nurse inf= new Nurse(i);
 			if(i%4 ==0)
-				inf.taux_active =80;
-			inf.taux_active =100;
+				inf.activiyRate =80;
+			inf.activiyRate =100;
 			/*********
 			Contraintes :
-				-1 = ne pas travailler (vacances)
-				0 = c'est égal
-				1 = j'ai pas trop envie de travailler
-				5 = j'ai très envie de travailler
+				-1 = holiday
+				0 = without pre.
+				1 = i don't want to work
+				5 = i really want to work
 			*****************/
 			
 			Random rn=  new Random();
-			int p= rn.nextInt(nbrTranches);
+			// we can limit number prefs.
+			//int p= 20 ;//rn.nextInt(nbrTranches);
 			//System.out.println("P:"+p);
 			for(int k=0 ;k<nbrTranches ; k++){
+				/*p--;
+				if(p>0)
+					inf.preferences.add(rn.nextInt(4));*/
 				if(k==i+1)
 					inf.preferences.add(1);
 				else if(k==i+2)
 					inf.preferences.add(2);
 				else if(k==i+3)
 					inf.preferences.add(3);
-				
 				else inf.preferences.add(0);
 			}
 			String[] cle= {"formateur", "novice", "debutant", "chef"};
 			for(int k=0 ;k<nbrCompetences ; k++){
-				inf.competences.put(cle[k], 1);
+				inf.skills.put(cle[k], 1);
 			}
 			
 			listInf.add(inf);

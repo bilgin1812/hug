@@ -1,0 +1,37 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "id": "/",
+  "type": "object",
+  "properties": {
+    "contraintes": {
+      "id": "constraints",
+      "type": "object",
+      "properties": {
+        "numberMinNight": {
+          "id": "numberMinNight",
+          "type": "integer"
+        },
+        "nightSeriesRate80": {
+          "id": "nightSeriesRate80",
+          "type": "integer"
+        },
+        "nightSeriesRate100": {
+          "id": "nightSeriesRate100",
+          "type": "integer"
+        },
+        "minWeeklyHoliday": {
+          "id": "minWeeklyHoliday",
+          "type": "integer"
+        },
+        "nbMinWeekendHoliday": {
+          "id": "nbMinWeekendHoliday",
+          "type": "integer"
+        },
+        "maxConsecutiveWork": {
+          "id": "maxConsecutiveWork",
+          "type": "integer"
+        }
+      }
+    }
+  }
+}

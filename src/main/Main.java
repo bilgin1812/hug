@@ -1,89 +1,70 @@
 package main;
 
-import gestionData.Afficher;
-import gestionData.CreateJson;
-import gestionData.Generate_Data;
-import gestionData.ReadCVS;
-import gestionData.ReadJson;
-
-import java.util.ArrayList;
-import java.util.Random;
-
-import org.json.simple.parser.ParseException;
-
+import gestionData.*;
 import ressource.*;
 import solve.*;
-import gestionData.Generate_Data;
-import gestionData.CreateJson;
-import gestionData.ReadJson;
-import solve.SolverInterface;
+import java.util.ArrayList;
+import org.json.simple.parser.ParseException;
 
 public class Main {
+
 	public SolverInterface itsSolverInterface;
 	public ReadJson itsReadJson;
-	private CreateJson itsCreateJson;
 	public Generate_Data itsGenerate_Data;
 	public static int durePlanning = 28;
 
 	public static void main(String[] args) throws ParseException {
-		int nbr_tranches = 28 * 3;
-		int nbr_inf =50; // nombre d'infirmieres
-		int num = 2; // combien d'horaires a afficher
-		String filename_infirmier = "inf.json";
-		String filename_contraintes = "Contraintes.json";
-		String filename_tranches = "Contraintes_par_tranches";
+		int nbrTotalShifts = 28 * 3;
+		int nbrNurses = 1000;
 
-		/**************  génération de données alétaoires  et contraintes en dure***********************************/
+		String fileNurses = "Nurses.json";
+		String fileConstraints = "Contsraints.json";
+		String fileShifts = "Constraints_per_Shift.json";
+
+		/************** Creation of random data end contraints ***********************************/
 
 		Contstraint contraintes = new Contstraint();
-		contraintes.conge_hebdomaire = 8; // c11 8 congé hebdomaire sur 4 semaines
-		contraintes.toutes_inf_nuit = 1; // c10 tous les inf au moins une nuit
-		contraintes.maxConsecutiveWork = 6; // c12 pas de travail cons plus que 6 jours 
-		contraintes.nbMinWeekendHoliday= 1; // c13 au moins 1 weekend congé
-		contraintes.seri_nuits_taux80 = 5; // c6 pour taux 80
-		contraintes.seri_nuits_taux100 = 6; // c5 pour taux 100
-		contraintes.nbrShiftPerDay = 1; // nombre tranche par jour par infirmier
+		contraintes.minWeeklyHoliday = 8;    // c9
+		contraintes.numberMinNight = 1;      // c8 
+		contraintes.maxConsecutiveWork = 6;  // c10
+		contraintes.nbMinWeekendHoliday = 1; // c13 
+		contraintes.nightSeriesRate80 = 6;   // c6 rate80
+		contraintes.nightSeriesRate100 = 7;  // c5 rate 100
+		contraintes.nbrShiftPerDay = 1;      //c2
 
-		ArrayList<Nurse> listInf_Aletoire = Generate_Data.CeateInfList(
-				nbr_inf, nbr_tranches);
-		ArrayList<ConstraintPerShift> listCont_Aletoire = Generate_Data
-				.CreateShitfsList(nbr_inf, nbr_tranches);
+		ArrayList<Nurse> randomNursesList = Generate_Data.CeateInfList(
+				nbrNurses, nbrTotalShifts);
+		ArrayList<ConstraintPerShift> randomConstaintsList = Generate_Data
+				.CreateShitfsList(nbrNurses, nbrTotalShifts);
 
-		/************** générations des fichiers json ***********************************************************/
+		/************** Create  files json ***********************************************************/
 
-		CreateJson.getJSON_infirmier(listInf_Aletoire, filename_infirmier);
-		CreateJson.getJSON_Contraintes(contraintes, filename_contraintes);
-		CreateJson.getJSONContraintes_par_Tranche(listCont_Aletoire,
-				filename_tranches);
+		CreateJson.getJSON_infirmier(randomNursesList, fileNurses);
+		CreateJson.getJSON_Contraintes(contraintes, fileConstraints);
+		CreateJson
+				.getJSONConstraintsPerShift(randomConstaintsList, fileShifts);
 
-		/************** lire les fichiers json ****************************************************************/
-		/* lire fichier json pour recuperer les infirmiers */
+		/************** Read files json ****************************************************************/
 
-		ArrayList<Nurse> listInf = ReadJson.readJsonInf("inf.json");  //"infirmiersGeneres.json" pref mixtes
+		ReadJson.readJsonNurses(fileNurses); 
+																		
 		Contstraint contraintes1 = ReadJson
-				.readJsonContraintes(filename_contraintes);
+				.readJsonContraintes(fileConstraints);
 		ArrayList<ConstraintPerShift> list_contrainte_tranche = ReadJson
-				.readJsonTranches(filename_tranches);
+				.readJsonTranches(fileShifts);
 
-		/****************************************SOLVER *********************************************************/
+		/**************************************** SOLVER *********************************************************/
 
-		//Afficher.AfficheInfirmiers(listInf_Aletoire);
-		//solver par contrainte
-		//NurseSolver_par_contrainte mySolver1= new NurseSolver_par_contrainte(listInf_Aletoire);
-		//mySolver.solve(n, num);$
 
-		/* SOLVER LINEAR */
-	//	NurseSolverLinear mySolver = new NurseSolverLinear(listInf_Aletoire, contraintes1,list_contrainte_tranche);
-		
-		NurseSolverLinear mySolver = new NurseSolverLinear(listInf_Aletoire, contraintes1,list_contrainte_tranche);
-		
-		 
-		//N solv = new N(listInf_Aletoire);
-		//solv.solve( );
-		
-		mySolver.solve( "GLOP_LINEAR_PROGRAMMING");  //<-- recommended (done by  google)
-		//mySolver.solve(1, 2, "GLPK_LINEAR_PROGRAMMING");
-		//mySolver.solve(1, 2, "CLP_LINEAR_PROGRAMMING");
+
+		NurseSolverLinear mySolver = new NurseSolverLinear(randomNursesList,
+				contraintes1, list_contrainte_tranche);
+
+		//ShowList.showNursesList(randomNursesList);
+
+		mySolver.solve("GLOP_LINEAR_PROGRAMMING",false,false); // <-- recommended (done by google)
+		// mySolver.solve(1, 2, "GLPK_LINEAR_PROGRAMMING");
+		// mySolver.solve(1, 2, "CLP_LINEAR_PROGRAMMING");
 
 	}
 

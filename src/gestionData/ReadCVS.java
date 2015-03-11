@@ -13,7 +13,9 @@ import ressource.Nurse;
 import net.sf.sojo.interchange.Serializer;
 import net.sf.sojo.interchange.json.JsonSerializer;
 
- 
+ /*
+  * For reading un CSV file but not used after first use, because we use Json
+  */
 public class ReadCVS {
  
 public ReadCVS()
@@ -21,7 +23,7 @@ public ReadCVS()
 }
   public ArrayList<Nurse> read() {
  
-	String csvFile = "infirmiers.csv";
+	String csvFile = "Nurses.csv";
 	BufferedReader br = null;
 	String line = "";
 	String cvsSplitBy = ",";

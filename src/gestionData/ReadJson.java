@@ -16,8 +16,13 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
 import ressource.*;
-
+/*
+ * Reads Json files
+ */
 public class ReadJson {
+	/*
+	 * @param Json filename 
+	 */
 
 static public Contstraint readJsonContraintes(String file) throws org.json.simple.parser.ParseException
 	{
@@ -30,15 +35,14 @@ static public Contstraint readJsonContraintes(String file) throws org.json.simpl
 
         JSONObject jsonObject =  (JSONObject) obj;
 
-        JSONObject cont_obj = (JSONObject)jsonObject.get("contraintes");
-       // System.out.println(cont_obj.toString());
-
-        cont.conge_hebdomaire    = Integer.valueOf(  cont_obj.get("conge_hebdomaire").toString());
-        cont.seri_nuits_taux100  = Integer.valueOf(  cont_obj.get("seri_nuits_taux100").toString());
-        cont.seri_nuits_taux80   = Integer.valueOf(  cont_obj.get("seri_nuits_taux80").toString());
-        cont.toutes_inf_nuit     = Integer.valueOf(  cont_obj.get("toutes_inf_nuit").toString());
-        cont.maxConsecutiveWork = Integer.valueOf(  cont_obj.get("travail_cons_6jours").toString());
-        cont.nbMinWeekendHoliday   = Integer.valueOf(  cont_obj.get("weekend_conge_min").toString());
+        JSONObject cont_obj = (JSONObject)jsonObject.get("constraints");
+    
+        cont.minWeeklyHoliday    = Integer.valueOf(  cont_obj.get("minWeeklyHoliday").toString());
+        cont.nightSeriesRate100  = Integer.valueOf(  cont_obj.get("nightSeriesRate100").toString());
+        cont.nightSeriesRate80   = Integer.valueOf(  cont_obj.get("nightSeriesRate80").toString());
+        cont.numberMinNight     = Integer.valueOf(  cont_obj.get("numberMinNight").toString());
+        cont.maxConsecutiveWork = Integer.valueOf(  cont_obj.get("maxConsecutiveWork").toString());
+        cont.nbMinWeekendHoliday   = Integer.valueOf(  cont_obj.get("nbMinWeekendHoliday").toString());
 
     } catch (FileNotFoundException e) {
         e.printStackTrace();
@@ -49,8 +53,12 @@ static public Contstraint readJsonContraintes(String file) throws org.json.simpl
 		
 	}
 
-/***** lire json liste infrimiers *********/
-static public ArrayList<Nurse> readJsonInf(String file) throws org.json.simple.parser.ParseException
+
+/*
+ * Read list of nurses
+ * @param Json filename 
+ */
+static public ArrayList<Nurse> readJsonNurses(String file) throws org.json.simple.parser.ParseException
 {
 	ArrayList<Nurse> list= new ArrayList<Nurse>();
 	 JSONParser parser = new JSONParser();
@@ -60,7 +68,7 @@ static public ArrayList<Nurse> readJsonInf(String file) throws org.json.simple.p
 
          JSONObject jsonObject =  (JSONObject) obj;
 
-         Object infirmiers = jsonObject.get("List_infirmiers");
+         Object infirmiers = jsonObject.get("List_Nurses");
          Iterator<JSONObject> iterator = ((ArrayList) infirmiers).iterator();
          while (iterator.hasNext()) {
         	 Map<String,Integer> comp = new HashMap<String,Integer>();
@@ -68,7 +76,7 @@ static public ArrayList<Nurse> readJsonInf(String file) throws org.json.simple.p
         	 
         	 JSONObject InfirmierObj =  iterator.next();
              String id = InfirmierObj.get("id").toString();
-             String taux =  InfirmierObj.get("taux").toString();
+             String taux =  InfirmierObj.get("activiyRate").toString();
              
              JSONArray preferences1 = (JSONArray) InfirmierObj.get("preferences");
              Iterator<JSONObject> iterator1 = ((ArrayList) preferences1).iterator();
@@ -78,7 +86,7 @@ static public ArrayList<Nurse> readJsonInf(String file) throws org.json.simple.p
              }
              
 
-             JSONObject competences= (JSONObject) InfirmierObj.get("competences");
+             JSONObject competences= (JSONObject) InfirmierObj.get("skills");
              for (Object rkey : competences.keySet()) {
                  Object val = competences.get(rkey);
                  comp.put(rkey.toString(), Integer.valueOf(val.toString()));
@@ -100,7 +108,10 @@ static public ArrayList<Nurse> readJsonInf(String file) throws org.json.simple.p
 	return list;
 	
 }
-/***************lire fichier json tranches ********/
+/*
+ * read the list of Constraints per Shift
+ * @param Json filename
+ */
 
 static public ArrayList<ConstraintPerShift> readJsonTranches(String file) throws org.json.simple.parser.ParseException
 {
@@ -114,7 +125,7 @@ static public ArrayList<ConstraintPerShift> readJsonTranches(String file) throws
 
          JSONObject jsonObject =  (JSONObject) obj;
 
-         Object liste_tranche = jsonObject.get("Contraintes_par_tranche");
+         Object liste_tranche = jsonObject.get("ConstraintsPerShift");
          Iterator<JSONObject> iterator = ((ArrayList) liste_tranche).iterator();
          
          while (iterator.hasNext()) {
@@ -122,15 +133,15 @@ static public ArrayList<ConstraintPerShift> readJsonTranches(String file) throws
        	 
         	 JSONObject tranche_obj =  iterator.next();
              
-             JSONObject nbr_min_comp= (JSONObject) tranche_obj.get("nomb_min_comp");
+             JSONObject nbr_min_comp= (JSONObject) tranche_obj.get("numberMinSkills");
              for (Object rkey : nbr_min_comp.keySet()) {
                  Object val = nbr_min_comp.get(rkey);
                  comp.put(rkey.toString(), Integer.valueOf(val.toString()));
 
              } 
-             ConstraintPerShift tr=new ConstraintPerShift(Integer.valueOf(tranche_obj.get("type_tranche").toString()));
-             tr.nombre_min_inf =Integer.valueOf(tranche_obj.get("nombre_min_inf").toString());
-             tr.nomb_min_comp=comp;
+             ConstraintPerShift tr=new ConstraintPerShift();
+             tr.numberMinSkillsSum =Integer.valueOf(tranche_obj.get("numberMinSkillsSum").toString());
+             tr.numberMinSkills=comp;
              list.add(tr);
        
          }

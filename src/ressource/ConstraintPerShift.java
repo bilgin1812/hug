@@ -1,18 +1,19 @@
 package ressource;
 
-
 import java.util.*;
+/*
+ * All shifts have differents constraints for minimum number Skills
+ */
 
 public class ConstraintPerShift {
 	
-	public int type_tranche;  // 1: matin 2: 15h 3 :nuit
-	public int nombre_min_inf;
-	public Map<String,Integer> nomb_min_comp ;
 	
-	public ConstraintPerShift(int type_tranche)
+	public Map<String,Integer> numberMinSkills ;
+	public int numberMinSkillsSum;
+	public ConstraintPerShift()
 	{
-		this.nomb_min_comp = new HashMap<String, Integer>();
-		this.type_tranche =  type_tranche;
+		this.numberMinSkills = new HashMap<String, Integer>();
+		
 	}
 
 }
