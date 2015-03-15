@@ -25,7 +25,6 @@ import java.util.ArrayList;
 import ressource.Nurse;
 
 import com.google.ortools.constraintsolver.DecisionBuilder;
-import com.google.ortools.constraintsolver.IntExpr;
 import com.google.ortools.constraintsolver.IntVar;
 import com.google.ortools.constraintsolver.Solver;
 
@@ -201,7 +200,7 @@ public class NurseSolverConstrainte implements SolverInterface {
 				
 		/*** Solve ****/
 		DecisionBuilder db = solver.makePhase(matrice_flat,
-							 solver.CHOOSE_FIRST_UNBOUND, solver.ASSIGN_RANDOM_VALUE);
+							 Solver.CHOOSE_FIRST_UNBOUND, Solver.ASSIGN_RANDOM_VALUE);
 
 		solver.newSearch(db);
 

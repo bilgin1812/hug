@@ -7,11 +7,13 @@ import java.util.Vector;
 public class Nurse {
 	public int id;
 	public int activiyRate;
+	@SuppressWarnings("rawtypes")
 	public Vector preferences;
 	public Map <String,Integer>skills;
 	
 
 	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public Nurse(int id,int rate,Map skills,Vector pref)
 	{
 		this.id=id;
@@ -22,6 +24,7 @@ public class Nurse {
 		
 		
 	}
+	@SuppressWarnings("rawtypes")
 	public Nurse(int id)
 	{
 		this.id=id;

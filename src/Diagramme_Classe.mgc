@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ClassDiagram>
-    <Class name="ressource.Infirmier" x="809" y="353">
+    <Class name="gestionData.Generate_Data" x="53" y="194">
         <AttributesDisplayFilter public-accepted="true"
             private-accepted="true" protected-accepted="true"
             default-accepted="true" static-accepted="false"/>
@@ -17,7 +17,6 @@
             private-accepted="false" protected-accepted="false"
             default-accepted="false" static-accepted="false"
             accessors-accepted="false" constructors-accepted="false"/>
-        <Extension destinationClassName="solve.SolverInterface"/>
         <Association destinationClassName="ressource.Infirmier"
             endpointName="listInf" kind="Simple"/>
         <Association
@@ -25,51 +24,6 @@
             endpointName="list_contrainte_tranche" kind="Simple"/>
         <Association destinationClassName="ressource.Contraintes"
             endpointName="contrainte" kind="Simple"/>
-    </Class>
-    <Class name="gestionData.Generate_Data" x="53" y="194">
-        <AttributesDisplayFilter public-accepted="true"
-            private-accepted="true" protected-accepted="true"
-            default-accepted="true" static-accepted="false"/>
-        <MethodDisplayFilter public-accepted="true"
-            private-accepted="false" protected-accepted="false"
-            default-accepted="false" static-accepted="false"
-            accessors-accepted="false" constructors-accepted="false"/>
-    </Class>
-    <Class name="gestionData.ReadJson" x="337" y="187">
-        <AttributesDisplayFilter public-accepted="true"
-            private-accepted="true" protected-accepted="true"
-            default-accepted="true" static-accepted="false"/>
-        <MethodDisplayFilter public-accepted="true"
-            private-accepted="false" protected-accepted="false"
-            default-accepted="false" static-accepted="false"
-            accessors-accepted="false" constructors-accepted="false"/>
-    </Class>
-    <Class name="ressource.Contraintes" x="597" y="353">
-        <AttributesDisplayFilter public-accepted="true"
-            private-accepted="true" protected-accepted="true"
-            default-accepted="true" static-accepted="false"/>
-        <MethodDisplayFilter public-accepted="true"
-            private-accepted="false" protected-accepted="false"
-            default-accepted="false" static-accepted="false"
-            accessors-accepted="false" constructors-accepted="false"/>
-    </Class>
-    <Class name="solve.SolverInterface" x="702" y="37">
-        <AttributesDisplayFilter public-accepted="true"
-            private-accepted="true" protected-accepted="true"
-            default-accepted="true" static-accepted="false"/>
-        <MethodDisplayFilter public-accepted="true"
-            private-accepted="false" protected-accepted="false"
-            default-accepted="false" static-accepted="false"
-            accessors-accepted="false" constructors-accepted="false"/>
-    </Class>
-    <Class name="ressource.Contrainte_par_Tranche" x="312" y="376">
-        <AttributesDisplayFilter public-accepted="true"
-            private-accepted="true" protected-accepted="true"
-            default-accepted="true" static-accepted="false"/>
-        <MethodDisplayFilter public-accepted="true"
-            private-accepted="false" protected-accepted="false"
-            default-accepted="false" static-accepted="false"
-            accessors-accepted="false" constructors-accepted="false"/>
     </Class>
     <Class name="solve.NurseSolver_par_contrainte" x="843" y="227">
         <AttributesDisplayFilter public-accepted="true"
@@ -79,38 +33,7 @@
             private-accepted="false" protected-accepted="false"
             default-accepted="false" static-accepted="false"
             accessors-accepted="false" constructors-accepted="false"/>
-        <Extension destinationClassName="solve.SolverInterface"/>
         <Association destinationClassName="ressource.Infirmier"
             endpointName="listInf" kind="Simple"/>
-    </Class>
-    <Class name="main.Main" x="201" y="38">
-        <AttributesDisplayFilter public-accepted="true"
-            private-accepted="true" protected-accepted="true"
-            default-accepted="true" static-accepted="false"/>
-        <MethodDisplayFilter public-accepted="true"
-            private-accepted="false" protected-accepted="false"
-            default-accepted="false" static-accepted="false"
-            accessors-accepted="false" constructors-accepted="false"/>
-        <Association destinationClassName="gestionData.Generate_Data"
-            endpointName="itsGenerate_Data" kind="Simple"/>
-        <Association destinationClassName="gestionData.ReadJson"
-            endpointName="itsReadJson" kind="Simple"/>
-        <Association destinationClassName="gestionData.CreateJson"
-            endpointName="itsCreateJson" kind="Simple"/>
-        <Association destinationClassName="solve.SolverInterface"
-            endpointName="itsSolverInterface" kind="Simple"/>
-        <Communication destinationClassName="solve.Solver_Linear"/>
-        <Communication destinationClassName="gestionData.ReadJson"/>
-        <Communication destinationClassName="gestionData.Generate_Data"/>
-        <Communication destinationClassName="gestionData.CreateJson"/>
-    </Class>
-    <Class name="gestionData.CreateJson" x="189" y="189">
-        <AttributesDisplayFilter public-accepted="true"
-            private-accepted="true" protected-accepted="true"
-            default-accepted="true" static-accepted="false"/>
-        <MethodDisplayFilter public-accepted="true"
-            private-accepted="false" protected-accepted="false"
-            default-accepted="false" static-accepted="false"
-            accessors-accepted="false" constructors-accepted="false"/>
     </Class>
 </ClassDiagram>

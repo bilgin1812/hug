@@ -23,7 +23,7 @@ public class NurseSolverLinear implements SolverInterface {
 	public ArrayList<Nurse> listNurses;
 	public Contstraint constraints;
 	public ArrayList<ConstraintPerShift> listConstraintsPerShift;
-	
+	public MPVariable[][] matrice;
 	public static final boolean DEBUGc2=false;
 	static {
 		// Windows
@@ -126,7 +126,7 @@ public class NurseSolverLinear implements SolverInterface {
 		int totalShiftsPerMonth = nbrDaysPerMonth * nbrshiftsPerDay;
 		int[] nbrInfPerDay = new int[totalShiftsPerMonth];
 		
-		int nbrNurseperDay= (int)(nbrNurses*0.12);//6 ;// (int) (Math.random() * (5)+1);
+		int nbrNurseperDay= (int)(nbrNurses*0.12);//12% per shift
 			System.out.println(" Scheduling "+this.listNurses.size()+" nurses:");
 		for (int i = 0; i < totalShiftsPerMonth; i++) {
 			nbrInfPerDay[i] = nbrNurseperDay;
@@ -142,7 +142,7 @@ public class NurseSolverLinear implements SolverInterface {
 		}
 		System.out.println();
 
-		MPVariable[][] matrice = new MPVariable[nbrNurses][totalShiftsPerMonth];
+		this.matrice = new MPVariable[nbrNurses][totalShiftsPerMonth];
 
 		MPObjective obj = solver.objective();
 		// application fo preferences on the matrix for starting

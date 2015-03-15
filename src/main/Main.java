@@ -5,9 +5,17 @@ import ressource.*;
 import solve.*;
 import java.util.ArrayList;
 import org.json.simple.parser.ParseException;
+import gestionData.ShowList;
+import gestionData.ModifyJson;
+import gestionData.ReadCVS;
+import gestionData.CreateJson;
 
 public class Main {
 
+	public CreateJson itsCreateJson;
+	public ReadCVS itsReadCVS;
+	public ModifyJson itsModifyJson;
+	public ShowList itsShowList;
 	public SolverInterface itsSolverInterface;
 	public ReadJson itsReadJson;
 	public Generate_Data itsGenerate_Data;
@@ -15,7 +23,7 @@ public class Main {
 
 	public static void main(String[] args) throws ParseException {
 		int nbrTotalShifts = 28 * 3;
-		int nbrNurses = 1000;
+		int nbrNurses = 50;
 
 		String fileNurses = "Nurses.json";
 		String fileConstraints = "Contsraints.json";
@@ -66,6 +74,6 @@ public class Main {
 		// mySolver.solve(1, 2, "GLPK_LINEAR_PROGRAMMING");
 		// mySolver.solve(1, 2, "CLP_LINEAR_PROGRAMMING");
 
+		ShowList.WriteCSV(mySolver.matrice, nbrNurses, nbrTotalShifts,randomNursesList);
 	}
-
 }
